@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { checkUserAsync, selectLoggedInUser } from '../redux/auth/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 const Signin = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(selectLoggedInUser)
 
   const handleChange = (e) => {
     setFormData({
@@ -19,19 +24,23 @@ const Signin = () => {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      // const res = await fetch('/api/auth/signin', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(formData),
+      // });
 
-      const data = await res.json();
-      console.log(data);
+      // const data = await res.json();
+      // console.log(data);
 
-      if (!res.ok) {
-        throw new Error(data.message || 'Something went wrong');
-      }
+      // if (!res.ok) {
+      //   throw new Error(data.message || 'Something went wrong');
+      // }
+      await dispatch(checkUserAsync(formData)).unwrap();
+
       navigate('/')
+
+      
     } catch (err) {
       setError(err.message);
     } finally {

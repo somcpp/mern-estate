@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { createUserAsync } from '../redux/auth/authSlice';
 
 const SignUp = () => {
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -19,18 +22,19 @@ const SignUp = () => {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      dispatch(createUserAsync(formData));
+      // const res = await fetch('/api/auth/signup', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(formData),
+      // });
 
-      const data = await res.json();
-      console.log(data);
+      // const data = await res.json();
+      // console.log(data);
 
-      if (!res.ok) {
-        throw new Error(data.message || 'Something went wrong');
-      }
+      // if (!res.ok) {
+      //   throw new Error(data.message || 'Something went wrong');
+      // }
       navigate('/sign-in')
     } catch (err) {
       setError(err.message);
