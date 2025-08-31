@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { checkUser, createUser } from "./authApi";
+import { checkUser, createUser, google } from "./authApi";
 
 const initialState = {
   status: "idle",
@@ -21,6 +21,19 @@ export const checkUserAsync = createAsyncThunk(
   async (userData, {rejectWithValue}) => {
     try{
       const response = await checkUser(userData);
+      return response.data;
+    }catch(error){
+      console.log(error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const googleAsync = createAsyncThunk(
+  "user/google",
+  async (userData, {rejectWithValue}) => {
+    try{
+      const response = await google(userData);
       return response.data;
     }catch(error){
       console.log(error);
@@ -59,7 +72,18 @@ export const userSlice = createSlice({
       .addCase(checkUserAsync.rejected, (state, action) => {
         state.status = "idle";
         state.error = action.error.message;
-      });
+      })
+      .addCase(googleAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(googleAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.loggedInUser = action.payload;
+      })
+      .addCase(googleAsync.rejected, (state, action) => {
+        state.status = "idle";
+        state.error = action.error.message;
+      })
   },
 });
 
