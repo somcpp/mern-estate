@@ -1,10 +1,11 @@
 import React from 'react'
 import { FaSearch } from 'react-icons/fa'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { selectLoggedInUser } from '../redux/auth/authSlice'
-
+import { signout } from '../redux/auth/authSlice'
 const Header = () => {
+  const dispatch = useDispatch();
   let user = useSelector(selectLoggedInUser)
   user = user.loggedInUser;
   console.log(user);
@@ -31,6 +32,9 @@ const Header = () => {
         <Link to='/about'>
           <li className='hidden sm:inline text-slate-700 hover:underline'>About</li>
         </Link>
+        {user && (
+          <li onClick={dispatch(signout)} className='hidden sm:inline text-slate-700 hover:underline hover:cursor-pointer hover:text-red-500 '>Sign out</li>
+        )}
         {user? (
           <Link to= '/profile'>
           <img src={user.avatar} className='rounded-full h-7 w-7 object-cover' alt="profile" />

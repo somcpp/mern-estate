@@ -49,6 +49,9 @@ export const userSlice = createSlice({
     increment: (state) => {
       state.value += 1;
     },
+    signout: (state) => {
+      state.loggedInUser = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -88,5 +91,6 @@ export const userSlice = createSlice({
 });
 
 export const selectLoggedInUser = (state) => state.user; // ✅ fixed
-
+export const selectUserInfo = (state) => state.user.loggedInUser; // ✅ fixed
+export const {signout} = userSlice.actions;
 export default userSlice.reducer;

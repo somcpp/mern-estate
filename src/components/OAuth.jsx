@@ -12,7 +12,7 @@ const OAuth = () => {
       const auth = getAuth(app);
 
       const result = await signInWithPopup(auth, Provider);
-      console.log(result)
+      // console.log(result)
       const userData = {
         name: result.user.displayName,
         email: result.user.email,
