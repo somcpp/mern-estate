@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { selectUserInfo } from "../redux/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUserInfo, updateUserAsync } from "../redux/auth/authSlice";
 import { app } from "../firebase";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
@@ -8,7 +8,9 @@ const Profile = () => {
   const fileRef = useRef(null);
   const userInfo = useSelector(selectUserInfo);
   const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const dispatch = useDispatch();
 
   const handleFileUpload = async (file) => {
     try {
@@ -27,11 +29,29 @@ const Profile = () => {
       setError(true);
     }
   };
+  const handleChange = async (e) => {
+    setFormData({...formData, [e.target.id]: e.target.value})
+  }
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try{
+      setLoading(true);
+      console.log(formData);
+      await dispatch(updateUserAsync({
+        userData: formData,
+        id: userInfo._id
+      }));
+      setLoading(false)
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-4">Profile</h1>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
           onChange={(e) => handleFileUpload(e.target.files[0])}
           type="file"
@@ -57,21 +77,29 @@ const Profile = () => {
           type="text"
           placeholder="username"
           className="border p-3 rounded-lg"
+          id="username"
+          defaultValue={userInfo.username}
+          onChange={handleChange}
         />
         <input
           type="email"
           placeholder="email"
           id="email"
           className="border p-3 rounded-lg"
+          defaultValue={userInfo.email}
+          onChange={handleChange}
         />
         <input
           type="text"
           placeholder="password"
           id="password"
           className="border p-3 rounded-lg"
+          onChange={handleChange}
         />
-        <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
-          update
+        <button
+        disabled={loading}
+        className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
+          {loading ? 'Loading...' : 'update'}
         </button>
       </form>
 

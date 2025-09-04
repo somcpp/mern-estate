@@ -46,3 +46,21 @@ export function google(userData){
       }
     })
 }
+
+export function updateUser(userData,id){
+    return new Promise(async (resolve,reject) => {
+        const response = await fetch(`/api/user/update/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+      if(response.ok) {
+        const data = await response.json();
+        resolve({data});
+      } else {
+        const err = await response.json();
+        console.log(err);
+        reject(err);
+      }
+    })
+}

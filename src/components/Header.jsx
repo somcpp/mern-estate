@@ -8,7 +8,7 @@ const Header = () => {
   const dispatch = useDispatch();
   let user = useSelector(selectLoggedInUser)
   user = user.loggedInUser;
-  console.log(user);
+  // console.log(user);
   return (
     <header className='bg-slate-200 shadow-md'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
