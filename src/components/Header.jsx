@@ -32,9 +32,9 @@ const Header = () => {
         <Link to='/about'>
           <li className='hidden sm:inline text-slate-700 hover:underline'>About</li>
         </Link>
-        {user && (
+        {/* {user && (
           <li onClick={dispatch(signout)} className='hidden sm:inline text-slate-700 hover:underline hover:cursor-pointer hover:text-red-500 '>Sign out</li>
-        )}
+        )} */}
         {user? (
           <Link to= '/profile'>
           <img src={user.avatar} className='rounded-full h-7 w-7 object-cover' alt="profile" />
