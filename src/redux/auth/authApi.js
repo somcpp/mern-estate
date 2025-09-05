@@ -80,3 +80,17 @@ export function deleteUser(id){
       }
     })
 }
+
+export function signout(){
+    return new Promise(async (resolve,reject) => {
+        const response = await fetch(`/api/auth/signout`);
+      if(response.ok) {
+        const data = await response.json();
+        resolve({data});
+      } else {
+        const err = await response.json();
+        console.log(err);
+        reject(err);
+      }
+    })
+}

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { checkUser, createUser, deleteUser, google, updateUser } from "./authApi";
+import { checkUser, createUser, deleteUser, google, updateUser,signout } from "./authApi";
 
 const initialState = {
   status: "idle",
@@ -10,9 +10,15 @@ const initialState = {
 
 export const createUserAsync = createAsyncThunk(
   "user/createUser",
-  async (userData) => {
-    const response = await createUser(userData);
-    return response.data;
+  async (userData , {rejectWithValue}) => {
+    try{
+      const response = await createUser(userData);
+      return response.data;
+    }catch(error){
+      console.log(error);
+      return rejectWithValue(error);
+    }
+    
   }
 );
 
@@ -68,6 +74,20 @@ export const deleteUserAsync = createAsyncThunk(
   }
 );
 
+export const signoutUserAsync = createAsyncThunk(
+  "user/signout",
+  async (id, {rejectWithValue}) => {
+    try{
+      const response = await signout(id);
+      return response.data;
+    }catch(error){
+      console.log(error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
+
 export const userSlice = createSlice({
   name: "user",
   initialState,   // ✅ fixed spelling
@@ -75,9 +95,6 @@ export const userSlice = createSlice({
     increment: (state) => {
       state.value += 1;
     },
-    signout: (state) => {
-      state.loggedInUser = null;
-    }
   },
   extraReducers: (builder) => {
     builder
@@ -130,8 +147,21 @@ export const userSlice = createSlice({
       .addCase(deleteUserAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.loggedInUser = null;
+        state.error = null;
       })
       .addCase(deleteUserAsync.rejected, (state, action) => {
+        state.status = "idle";
+        state.error = action.error.message;
+      })
+      .addCase(signoutUserAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(signoutUserAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.loggedInUser = null;
+        state.error = null;
+      })
+      .addCase(signoutUserAsync.rejected, (state, action) => {
         state.status = "idle";
         state.error = action.error.message;
       })
@@ -140,5 +170,4 @@ export const userSlice = createSlice({
 
 export const selectLoggedInUser = (state) => state.user; // ✅ fixed
 export const selectUserInfo = (state) => state.user.loggedInUser; // ✅ fixed
-export const {signout} = userSlice.actions;
 export default userSlice.reducer;

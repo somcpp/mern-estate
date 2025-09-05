@@ -21,27 +21,21 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      setError(null);
-      dispatch(createUserAsync(formData));
-      // const res = await fetch('/api/auth/signup', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData),
-      // });
+  setLoading(true);
+  setError(null);
 
-      // const data = await res.json();
-      // console.log(data);
+  await dispatch(createUserAsync(formData)).unwrap();
 
-      // if (!res.ok) {
-      //   throw new Error(data.message || 'Something went wrong');
-      // }
-      navigate('/sign-in')
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+  // if we got here, signup actually worked
+  navigate('/sign-in');
+} catch (err) {
+  // signup failed (API error, network error, rejectWithValue, etc.)
+  console.error("Signup failed:", err);
+  setError(err.message || "Signup failed");
+} finally {
+  setLoading(false);
+}
+
   };
 
   return (

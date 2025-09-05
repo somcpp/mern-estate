@@ -3,7 +3,7 @@ import { FaSearch } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { selectLoggedInUser } from '../redux/auth/authSlice'
-import { signout } from '../redux/auth/authSlice'
+
 const Header = () => {
   const dispatch = useDispatch();
   let user = useSelector(selectLoggedInUser)
