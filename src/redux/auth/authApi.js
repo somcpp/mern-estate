@@ -64,3 +64,19 @@ export function updateUser(userData,id){
       }
     })
 }
+
+export function deleteUser(id){
+    return new Promise(async (resolve,reject) => {
+        const response = await fetch(`/api/user/delete/${id}`, {
+        method: 'DELETE',
+      });
+      if(response.ok) {
+        const data = await response.json();
+        resolve({data});
+      } else {
+        const err = await response.json();
+        console.log(err);
+        reject(err);
+      }
+    })
+}

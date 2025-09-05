@@ -33,7 +33,9 @@ const Header = () => {
           <li className='hidden sm:inline text-slate-700 hover:underline'>About</li>
         </Link>
         {/* {user && (
-          <li onClick={dispatch(signout)} className='hidden sm:inline text-slate-700 hover:underline hover:cursor-pointer hover:text-red-500 '>Sign out</li>
+          <Link to='sign-in'>
+          <li onClick={dispatch(signout())}  className='hidden sm:inline text-slate-700 hover:underline hover:cursor-pointer hover:text-red-500 '>Sign out</li>
+          </Link>
         )} */}
         {user? (
           <Link to= '/profile'>

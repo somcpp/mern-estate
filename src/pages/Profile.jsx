@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUserInfo, updateUserAsync } from "../redux/auth/authSlice";
+import { deleteUserAsync, selectUserInfo, updateUserAsync } from "../redux/auth/authSlice";
 import { app } from "../firebase";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
@@ -43,6 +43,14 @@ const Profile = () => {
         id: userInfo._id
       }));
       setLoading(false)
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  const handleDeleteUser = async () => {
+    try{
+      await dispatch(deleteUserAsync(userInfo._id));
     }catch(err){
       console.log(err)
     }
@@ -104,7 +112,7 @@ const Profile = () => {
       </form>
 
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer">Delete account</span>
+        <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete account</span>
         <span className="text-red-700 cursor-pointer">Sign out</span>
       </div>
     </div>
