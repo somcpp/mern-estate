@@ -156,11 +156,7 @@ export const userSlice = createSlice({
       .addCase(signoutUserAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(signoutUserAsync.fulfilled, (state, action) => {
-        state.status = "idle";
-        state.loggedInUser = null;
-        state.error = null;
-      })
+      .addCase(signoutUserAsync.fulfilled, () => initialState)
       .addCase(signoutUserAsync.rejected, (state, action) => {
         state.status = "idle";
         state.error = action.error.message;

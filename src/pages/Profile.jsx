@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import {
   getUserListingsAsync,
   selectUserListings,
+  deleteListingAsync
 } from "../redux/List/listSlice";
 
 const Profile = () => {
@@ -27,7 +28,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
-
+  const [showListings, setShowListings] = useState(false);
   // === Handlers ===
   const handleFileUpload = async (file) => {
     try {
@@ -71,6 +72,15 @@ const Profile = () => {
     }
   };
 
+  const handleDeleteListing = async(id) => {
+    try{
+      await dispatch(deleteListingAsync(id));
+      await dispatch(getUserListingsAsync(userInfo._id))
+    }catch(error){
+      console.log(error)
+    }
+  }
+
   const handleDeleteUser = async () => {
     try {
       await dispatch(deleteUserAsync(userInfo._id));
@@ -90,6 +100,7 @@ const Profile = () => {
   const handleShowListings = async () => {
     try {
       await dispatch(getUserListingsAsync(userInfo._id));
+      setShowListings(true);
     } catch (err) {
       console.error(err);
     }
@@ -193,7 +204,7 @@ const Profile = () => {
         Show Listings
       </button>
 
-      {userListings && userListings.length > 0 && (
+      {showListings && (
         <div className="flex flex-col gap-4">
           <h1 className="text-center mt-7 text-2xl font-semibold">
             Your Listings
@@ -219,7 +230,11 @@ const Profile = () => {
               </Link>
 
               <div className="flex flex-col items-center">
-                <button className="text-red-700 uppercase">Delete</button>
+                <button
+                  onClick={() => handleDeleteListing(listing._id)}
+                 className="text-red-700 uppercase hover:cursor-pointer">
+                  Delete
+                </button>
                 <button className="text-green-700 uppercase">Edit</button>
               </div>
             </div>

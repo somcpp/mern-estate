@@ -19,3 +19,15 @@ export function getUserlistings(id) {
       resolve({data});
     })
 }
+
+export function deleteUserlisting(id) {
+    return new Promise(async (resolve) => {
+        const response = await fetch(`/api/listing/delete/${id}`,{
+          method: 'DELETE',
+        }
+        );
+      const data = await response.json();
+
+      resolve({data});
+    })
+}

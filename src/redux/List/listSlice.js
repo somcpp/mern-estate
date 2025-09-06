@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createListing, getUserlistings } from "./listApi";
+import { createListing, getUserlistings,deleteUserlisting } from "./listApi";
 
-const initialState = {
+export const initialState = {
   status: "idle",
   userListings: null,
   error: null
@@ -26,6 +26,20 @@ export const getUserListingsAsync = createAsyncThunk(
   async (id , {rejectWithValue}) => {
     try{
       const response = await getUserlistings(id);
+      return response.data;
+    }catch(error){
+      console.log(error);
+      return rejectWithValue(error);
+    }
+    
+  }
+);
+
+export const deleteListingAsync = createAsyncThunk(
+  "list/deletelisting",
+  async (id , {rejectWithValue}) => {
+    try{
+      const response = await deleteUserlisting(id);
       return response.data;
     }catch(error){
       console.log(error);
@@ -64,6 +78,17 @@ export const listSlice = createSlice({
         state.userListings = action.payload;
       })
       .addCase(getUserListingsAsync.rejected, (state, action) => {
+        state.status = "idle";
+        state.error = action.error.message;
+      })
+      .addCase(deleteListingAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteListingAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        
+      })
+      .addCase(deleteListingAsync.rejected, (state, action) => {
         state.status = "idle";
         state.error = action.error.message;
       })

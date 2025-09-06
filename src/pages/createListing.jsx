@@ -49,9 +49,9 @@ export default function CreateListing() {
             ...formData,
             imageUrls: formData.imageUrls.concat(urls)
           })
+          setUploading(false);
+          setImageUploadError(false);
         });
-      setUploading(false);
-      setImageUploadError(false);
     } else {
       setImageUploadError('You can only upload 6 images per listing');
       setUploading(false);
@@ -272,7 +272,8 @@ export default function CreateListing() {
 
             <button
               onClick={handleImageSubmit}
-              type='button' className='p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80'>{uploading ? 'Uploading...' : 'Upload'}</button>
+              disabled={uploading}
+              type='button' className='p-3 text-green-700 border border-green-700 rounded hover:shadow-lg disabled:opacity-80 hover:cursor-pointer bg-yellow-300 rounded-2xl'>{uploading ? 'Uploading...' : 'Upload'}</button>
           </div>
           {formData.imageUrls.length > 0 && formData.imageUrls.map((url, index) => (
             <div
@@ -293,7 +294,7 @@ export default function CreateListing() {
               </button>
             </div>
           ))}
-          <button className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>Create Listing</button>
+          <button className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80 hover:cursor-pointer'>Create Listing</button>
           <p className="text-green-500 mt-5">
         {updateSuccess? 'list created SuccessFully': ''}
       </p>
