@@ -8,17 +8,18 @@ import {
 } from "../redux/auth/authSlice";
 import { app } from "../firebase";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { Link } from "react-router-dom";
+import { Link,useNavigate  } from "react-router-dom";
 import {
   getUserListingsAsync,
   selectUserListings,
-  deleteListingAsync
+  deleteListingAsync,
+  getListingAsync
 } from "../redux/List/listSlice";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const fileRef = useRef(null);
-
+  const navigate = useNavigate();
   // Redux state
   const userInfo = useSelector(selectUserInfo);
   const userListings = useSelector(selectUserListings);
@@ -235,7 +236,10 @@ const Profile = () => {
                  className="text-red-700 uppercase hover:cursor-pointer">
                   Delete
                 </button>
-                <button className="text-green-700 uppercase">Edit</button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button onClick={dispatch(getListingAsync(listing._id))}
+                  className='text-green-700 uppercase'>Edit</button>
+                </Link>
               </div>
             </div>
           ))}

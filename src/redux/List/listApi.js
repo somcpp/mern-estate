@@ -31,3 +31,27 @@ export function deleteUserlisting(id) {
       resolve({data});
     })
 }
+
+export function updateUserListings(listData) {
+    return new Promise(async (resolve) => {
+        const {_id} = listData
+        const response = await fetch(`/api/listing/update/${_id}`,{
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(listData),
+        }
+        );
+      const data = await response.json();
+
+      resolve({data});
+    })
+}
+
+export function getListing(id) {
+    return new Promise(async (resolve) => {
+        const response = await fetch(`/api/listing/get/${id}`);
+      const data = await response.json();
+
+      resolve({data});
+    })
+}
